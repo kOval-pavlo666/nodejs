@@ -23,10 +23,15 @@ async function remove(id) {
   return workerModel.findByIdAndDelete(id);
 }
 
+async function findOne(filter) {
+  return workerModel.findOne(filter);
+}
+
 module.exports = {
   create,
   find,
   findById,
   update,
   remove,
+  findOne
 };

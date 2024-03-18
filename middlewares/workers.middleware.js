@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const ObjectId = require('mongoose').Types.ObjectId;
 const workerService = require('../services/workers.service');
+const { WorkerSchema } = require('../schemas/users.schemas');
 
 async function workerByIdValidation(req, res, next) {
     try {
@@ -22,6 +23,29 @@ async function workerByIdValidation(req, res, next) {
     }
 };
 
+const workerDataValidation = async (req, res, next) => {
+    try {
+        const { error } = WorkerSchema.validate(req.body);
+
+        if (error) {
+            throw createError.BadRequest(error.details[0].message);
+        }
+
+        const worker = await workerService.findOne({
+            fullName: req.body.fullName
+        });
+
+        if (worker) {
+            throw createError.BadRequest("Worker with such fullname already exist");
+        }
+
+        next();
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     workerByIdValidation,
+    workerDataValidation
 };
