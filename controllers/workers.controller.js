@@ -1,6 +1,7 @@
 const workerService = require('../services/workers.service');
+const createError = require('http-errors');
 
-async function createWorker(req, res) {
+async function createWorker(req, res, next) {
     try {
        const newWorker = await workerService.create(req.body);
 
@@ -9,30 +10,22 @@ async function createWorker(req, res) {
             data: newWorker,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
-async function getWorkers(req, res) {
+async function getWorkers(req, res, next) {
     try {
         res.status(200).json({
             status: 200,
             data: await workerService.find(),
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
-async function getWorker(req, res) {
+async function getWorker(req, res, next) {
     try {
         const { id } = req.params;
         const worker = await workerService.findById(id);
@@ -49,15 +42,11 @@ async function getWorker(req, res) {
             data: worker,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
-async function updateWorker(req, res) {
+async function updateWorker(req, res, next) {
     try {
         const { id } = req.params;
         const workerData = req.body;
@@ -68,15 +57,11 @@ async function updateWorker(req, res) {
             data: workerUpdated,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
-async function deleteWorker(req, res) {
+async function deleteWorker(req, res, next) {
     try {
         const { id } = req.params;
         await workerService.remove(id);
@@ -85,11 +70,7 @@ async function deleteWorker(req, res) {
             status: 200,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
