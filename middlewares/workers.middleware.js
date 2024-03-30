@@ -1,7 +1,7 @@
 const createError = require('http-errors');
 const ObjectId = require('mongoose').Types.ObjectId;
 const workerService = require('../services/workers.service');
-const { WorkerSchema } = require('../schemas/users.schemas');
+const { WorkerSchema } = require('../schemas/workers.schemas');
 
 async function workerByIdValidation(req, res, next) {
     try {

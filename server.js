@@ -1,11 +1,16 @@
 // 11) сутність "працівник поліклініки": ПІП, спеціальність, розклад прийому (день тижня, початок
 //     прийому, кінець прийому, кабінет, ділянка).
+const { port , mongodb_uri } = require("./config");
+
 const mongoose = require('mongoose');
 const express = require("express");
-const { port , mongodb_uri } = require("./config");
 const createError = require('http-errors');
 
+const { authenticationCheck } = require('./middlewares/auth.middleware');
+
 const workersRouter = require('./routes/workers.route');
+const authRouter = require('./routes/auth.route');
+const usersRouter = require('./routes/users.route');
 
 const app = express();
 app.use(express.json());
@@ -38,6 +43,8 @@ app.use((err, req, res, next) => {
 
 
 app.use("/workers", workersRouter);
+app.use('/auth', authRouter);
+app.use('/users', usersRouter);
 
 mongoose.connect(mongodb_uri)
   .then(() => {
