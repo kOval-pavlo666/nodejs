@@ -4,8 +4,8 @@ async function createWorker(req, res) {
     try {
        const newWorker = await workerService.create(req.body);
 
-        res.status(200).json({
-            status: 200,
+        res.status(201).json({
+            status: 201,
             data: newWorker,
         });
     } catch (err) {
@@ -38,8 +38,8 @@ async function getWorker(req, res) {
         const worker = await workerService.findById(id);
 
         if (!worker) {
-            return res.status(400).json({
-                status: 400,
+            return res.status(404).json({
+                status: 404,
                 message: 'worker not found.',
             });
         }
@@ -81,8 +81,8 @@ async function deleteWorker(req, res) {
         const { id } = req.params;
         await workerService.remove(id);
 
-        res.status(200).json({
-            status: 200,
+        res.status(204).json({
+            status: 204,
         });
     } catch (err) {
         console.error(err);
